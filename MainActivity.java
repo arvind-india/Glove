@@ -54,10 +54,10 @@ public class MainActivity extends AppCompatActivity {
     ArrayAdapter<BluetoothDevice> pairedDeviceAdapter;
     private UUID myUUID; //Adresse du telephone
     private final String UUID_STRING_WELL_KNOWN_SPP =
-            "00001101-0000-1000-8000-00805F9B34FB";//Adresse de la carte
+            "00001101-0000-1000-8000-00805F9B34FB";//Adresse de la carte Arduino SPP
 
     ThreadBtconnect monThreadBtconnect; //Thread en arriere plan pour maintenir la connexion bluetooth
-    ThreadConnected myThreadConnected; //Statut quand le thead est connecté on va pourvoir effectuer les actions necessaire à l'appli
+    ThreadConnected myThreadConnected; //Thread est connecté : on va pourvoir effectuer les actions necessaire à l'appli
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -182,7 +182,7 @@ public class MainActivity extends AppCompatActivity {
     } //Destructeur
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) { 
         if(requestCode==REQUEST_ENABLE_BT){
             if(resultCode == Activity.RESULT_OK){
                 setup();
@@ -190,7 +190,7 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this,
                         "BlueTooth NOT enabled",
                         Toast.LENGTH_SHORT).show();
-                finish();
+                finish(); //Ferme application
             }
         }
     }
@@ -215,18 +215,15 @@ public class MainActivity extends AppCompatActivity {
         public ThreadConnected(BluetoothSocket socket) {
             connectedBluetoothSocket = socket;
             InputStream in = null;
-            OutputStream out = null;
 
             try {
                 in = socket.getInputStream();
-                out = socket.getOutputStream();
             } catch (IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
 
             connectedInputStream = in;
-            connectedOutputStream = out;
         }
 
         @Override
